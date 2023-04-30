@@ -99,12 +99,6 @@ public class MainActivity extends AppCompatActivity {
                 RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
                 String url = "http://api.openweathermap.org/data/2.5/weather?q="
                         + query + "&appid=e457293228d5e1465f30bcbe1aea456b";
-                //https://api.openweathermap.org/data/2.5/weather?q=London&appid=e457293228d5e1465f30bcbe1aea456b
-
-                // l'ancienne clé : 5bd7e048cf1ef62c79254f75dfe27d19
-                // la clé actuelle: e457293228d5e1465f30bcbe1aea456b
-                //clé 2022 : e457293228d5e1465f30bcbe1aea456b
-
 
                 StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
 
@@ -175,8 +169,6 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-
-
                 return false;
             }
         });

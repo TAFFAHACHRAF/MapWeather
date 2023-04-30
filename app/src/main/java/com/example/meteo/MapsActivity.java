@@ -8,9 +8,6 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,7 +26,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     Location currentLocation;
 
     FusedLocationProviderClient fusedLocationProviderClient;
-    // l'identifiant de l'appel de l'autorisation
     private static final int REQUEST_CODE = 101;
 
     private GoogleMap mMap;
@@ -38,26 +34,20 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.map);
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         fetchLocation();
-
     }
 
     private void fetchLocation() {
 
-        // Vérifier est ce que l'application est autorisée à accéder à la localisation de l'appareil
         if (ActivityCompat.checkSelfPermission(
                 this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
                         != PackageManager.PERMISSION_GRANTED) {
-            // Demande d'autorisation, un pop up s'afficher pour accepter ou refuser la demande d'autorisation
-            // le résultat de cette demande est renvoyé à la méthode  onRequestPermissionsResult qui se chargera de la suite
 
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                     REQUEST_CODE);
@@ -68,63 +58,16 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         Criteria criteria = new Criteria();
         String bestProvider = String.valueOf(locationManager.getBestProvider(criteria, true)).toString();
 
-        //You can still do this if you like, you might get lucky:
         Location location = locationManager.getLastKnownLocation(bestProvider);
         currentLocation = location;
-        ///Task<Location> task = fusedLocationProviderClient.getLastLocation();
-        /*task.addOnSuccessListener(new OnSuccessListener<Location>() {
-            @Override
-            public void onSuccess(Location location) {
-                if (location != null) {
-                    currentLocation = location;
-
-                    // Afficher la lattitude et la longitude avec un Toast
-                    Toast.makeText(getApplicationContext(), currentLocation.getLatitude() + "" +currentLocation.getLongitude(), Toast.LENGTH_SHORT).show();
-                    SupportMapFragment supportMapFragment = (SupportMapFragment) getSupportFragmentManager().
-                            findFragmentById(R.id.map);
-                    assert supportMapFragment != null;
-                    supportMapFragment.getMapAsync(MapsActivity.this);
-                }
-            }
-        });*/
     }
-
-
-    /*@Override
-    public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
-
-        // Add a marker in Sydney and move the camera
-        //LatLng sydney = new LatLng(-34, 151);
-        LatLng mohamedia = new LatLng(33.7066, -7.3944);
-        mMap.addMarker(new MarkerOptions().position(mohamedia).title("Marker in Mohamedia"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(mohamedia));
-
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mohamedia,12));
-        mMap.getUiSettings().setZoomControlsEnabled(true);
-
-        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-            final GoogleMap gmap=mMap;
-            @Override
-            public void onMapClick(LatLng latLng) {
-
-                gmap.addMarker(new MarkerOptions().position(latLng));
-                Toast.makeText(MapsActivity.this, latLng.latitude+"-"
-                        +latLng.longitude, Toast.LENGTH_SHORT).show();
-
-            }
-        });
-
-    }*/
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         Intent intent = getIntent();
-        // créer un objet latLng qui stocke la latitude et la longitude de la localisation actuelle
         LatLng latLng = new LatLng(Double.parseDouble(intent.getStringExtra("lat")), Double.parseDouble(intent.getStringExtra("lon")));
 
-
-        MarkerOptions markerOptions = new MarkerOptions().position(latLng).title("Je suis là !");
+        MarkerOptions markerOptions = new MarkerOptions().position(latLng).title("I'm here !");
         googleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 2));
         googleMap.addMarker(markerOptions);
@@ -135,9 +78,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
         switch (requestCode) {
-            // Dans le cas lorsque vous cliquez sur le bouton "autoriser" du pop up ,
-            // il y aura un deuxième appel de la méthode
-// fetchLocation() pour obtenir la dernière localisation
             case REQUEST_CODE:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     fetchLocation();
@@ -145,7 +85,5 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 break;
         }
     }
-
-
 
 }
