@@ -1,6 +1,6 @@
-# MeteoApp
+# MapWeather
 
-MeteoApp est une application mobile pour Android qui utilise l'API de Google pour fournir des informations sur la météo. Le framework Voley est utilisé pour la communication entre les deux composants.
+MapWeather est une application mobile pour Android qui utilise l'API de Google pour fournir des informations sur la météo. Le framework Voley est utilisé pour la communication entre les deux composants.
 
 ## Installation
 
